@@ -9,14 +9,13 @@ type PostInteractor struct {
 	PostRepository PostRepository
 }
 
-type PostAddInput struct {
+type PostCreateInput struct {
 	Title string
 	Body string
 }
 
-func (interactor *PostInteractor) Add(input PostAddInput) (err error) {
-	u, err := GeneratePost(input.Title, input.Body)
-	_, err = interactor.PostRepository.Store(u)
+func (interactor *PostInteractor) Add(post domain.Post) (err error) {
+	_, err = interactor.PostRepository.Store(post)
 	return
 }
 

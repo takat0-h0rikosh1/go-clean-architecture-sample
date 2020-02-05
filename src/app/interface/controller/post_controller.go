@@ -20,11 +20,15 @@ func NewPostController(sqlHandler database.SQLHandler) *PostController {
 }
 
 func (controller *PostController) Create(c Context) error {
-	input := new(usecase.PostAddInput)
+	input := new(usecase.PostCreateInput)
 	if err := c.Bind(input); err != nil {
 		return c.JSON(400, err)
 	}
-	err := controller.Interactor.Add(*input)
+	post, err := GeneratePost(input.Title, input.Body)
+	if err != nil {
+		return c.JSON(500, err)
+	}
+	err = controller.Interactor.Add(post)
 	if err != nil {
 		return c.JSON(500, err)
 	}
